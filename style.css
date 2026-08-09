@@ -880,6 +880,81 @@ section { position: relative; z-index: 2; }
   transform: translateY(-2px);
 }
 
+/* ====== Payment method tabs ====== */
+.payment-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--cream-deep);
+  padding: 0.35rem;
+  border-radius: 999px;
+}
+.payment-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1rem;
+  border-radius: 999px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pearl-70);
+  transition: background .3s var(--ease-quiet), color .3s var(--ease-quiet);
+}
+.payment-tab svg { flex-shrink: 0; }
+.payment-tab:hover { color: var(--pearl); }
+.payment-tab.is-active {
+  background: var(--pearl);
+  color: var(--cream);
+}
+
+.payment-panel { margin-top: 1.4rem; }
+
+.payment-hint {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--pearl-70);
+  margin-bottom: 1rem;
+}
+
+.qris-box {
+  background: var(--cream-deep);
+  border-radius: 1rem;
+  padding: 1.4rem;
+  margin-bottom: 1rem;
+}
+.qris-img {
+  width: 100%;
+  max-width: 260px;
+  display: block;
+  margin: 0 auto 1.1rem;
+  border-radius: 0.7rem;
+  box-shadow: 0 8px 24px rgba(43,43,43,0.12);
+}
+.qris-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 1rem;
+  border-top: 1px solid var(--pearl-10);
+}
+.qris-total .label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pearl-70);
+}
+.qris-total .value {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  color: var(--matcha);
+}
+
 /* ====== Footer ====== */
 .site-footer {
   background: var(--pearl);
