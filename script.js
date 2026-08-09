@@ -163,6 +163,7 @@ function updateUI() {
   largeRow.querySelector('.value').textContent = `${state.large} pcs · ${formatRupiah(state.large * state.priceLarge)}`;
   largeRow.classList.toggle('empty', state.large === 0);
   document.getElementById('modalTotal').textContent = formatRupiah(total);
+  document.getElementById('qrisTotal').textContent = formatRupiah(total);
 }
 
 document.querySelectorAll('.qty-btn').forEach(btn => {
@@ -202,8 +203,23 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) closeModal();
 });
 
-// ====== WhatsApp redirect ======
-document.getElementById('waButton').addEventListener('click', () => {
+// ====== Payment method tabs ======
+const paymentTabs = document.querySelectorAll('.payment-tab');
+const panelWhatsapp = document.getElementById('panelWhatsapp');
+const panelQris = document.getElementById('panelQris');
+
+paymentTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    paymentTabs.forEach(t => t.classList.remove('is-active'));
+    tab.classList.add('is-active');
+    const method = tab.dataset.method;
+    panelWhatsapp.hidden = method !== 'whatsapp';
+    panelQris.hidden = method !== 'qris';
+  });
+});
+
+// ====== Build order message ======
+function buildOrderMessage(paidViaQris) {
   const name = document.getElementById('custName').value.trim() || '-';
   const note = document.getElementById('custNote').value.trim() || '-';
   const totalSmall = state.small * state.priceSmall;
@@ -215,10 +231,27 @@ document.getElementById('waButton').addEventListener('click', () => {
   message += `- Ukuran Besar: ${state.large} pcs (Rp ${totalLarge.toLocaleString('id-ID')})\n\n`;
   message += `Total Bayar: Rp ${grandTotal.toLocaleString('id-ID')}\n\n`;
   message += `Nama Pemesan: ${name}\n`;
-  message += `Catatan: ${note}`;
+  message += `Catatan: ${note}\n`;
+  message += paidViaQris
+    ? `Metode Bayar: QRIS (sudah dibayar, bukti terlampir)`
+    : `Metode Bayar: Belum dibayar, atur langsung via chat`;
 
+  return message;
+}
+
+function openWhatsapp(message) {
   const url = `https://wa.me/6289678442205?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank');
+}
+
+// ====== WhatsApp redirect (order without upfront payment) ======
+document.getElementById('waButton').addEventListener('click', () => {
+  openWhatsapp(buildOrderMessage(false));
+});
+
+// ====== WhatsApp redirect (paid via QRIS, confirm + send proof) ======
+document.getElementById('waConfirmButton').addEventListener('click', () => {
+  openWhatsapp(buildOrderMessage(true));
 });
 
 updateUI();
